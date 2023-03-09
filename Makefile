@@ -10,16 +10,18 @@ SRC = window.cpp
 SRC += glad.c
 SRC2 = shaders.cpp
 SRC2 += glad.c
+SRC2 += win.cpp
 LIB = lib/libglfw.3.3.dylib
 INC = -I includes/GLFW/
 INC += -I includes/glad/
+INC += -I includes/
 
 all: $(WINDOW) $(SHADERS)
 
-$(WINDOW):
+$(WINDOW): $(SRC)
 	$(CC) $(ARGS) $(INC) $(FRAMEWORK) $(SRC) $(LIB) -o $(WINDOW)
 
-$(SHADERS):
+$(SHADERS): $(SRC2)
 	$(CC) $(ARGS) $(INC) $(FRAMEWORK) $(SRC2) $(LIB) -o $(SHADERS)
 
 fclean:
