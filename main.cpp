@@ -1,5 +1,10 @@
 #include "includes/proj.hpp"
 
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
 const char *vertexShaderSource = "#version 330 core\n"
 	"layout (location = 0) in vec3 aPos;\n"
 	"void main()\n"
@@ -14,13 +19,6 @@ const char *fragShaderSource = "#version 330 core\n"
 	"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 	"}\0";
 
-
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
 int main()
 {
 	//assigning vertices for a triangle, because GL uses 3D coordinate,
@@ -34,37 +32,17 @@ int main()
 	GLFWwindow *window = mywindow.getWin();
 				
 				/*CREATING A VERTEX*/
-		//creating shader object, then using the object and compilation string 
-	//for compilation
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
 	int  success;
 	char infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);//error checker
-	if(!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
+	Shader vshader(vertexShaderSource, 0); //they need error messages for failed compilations
+	Shader fshader(fragShaderSource, 1);
 
-			/*CREATING FRAGMENT SHADER*/
-    unsigned int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragShader, 1, &fragShaderSource, NULL);
-	glCompileShader(fragShader);
-	glGetShaderiv(fragShader, GL_COMPILE_STATUS, &success);//error checker
-	if(!success)
-	{
-		glGetShaderInfoLog(fragShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
 	
 	//creating program object
 	unsigned int shaderProgram;
 	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragShader);
+	glAttachShader(shaderProgram, vshader.getShader());
+	glAttachShader(shaderProgram, fshader.getShader());
 	glLinkProgram(shaderProgram);
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if(!success)
@@ -74,8 +52,8 @@ int main()
 	}
 	
 	//activating shader program and deleting shaders
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragShader);
+	glDeleteShader(vshader.getShader());
+	glDeleteShader(fshader.getShader());
 
 	//linking vertex attributes
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
