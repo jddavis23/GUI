@@ -5,19 +5,19 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
-const char *vertexShaderSource = "#version 330 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"void main()\n"
-	"{\n"
-	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"}\0";
+// const char *vertexShaderSource = "#version 330 core\n"
+// 	"layout (location = 0) in vec3 aPos;\n"
+// 	"void main()\n"
+// 	"{\n"
+// 	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+// 	"}\0";
 
-const char *fragShaderSource = "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"void main()\n"
-	"{\n"
-	"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"}\0";
+// const char *fragShaderSource = "#version 330 core\n"
+// 	"out vec4 FragColor;\n"
+// 	"void main()\n"
+// 	"{\n"
+// 	"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+// 	"}\0";
 
 int main()
 {
@@ -30,31 +30,15 @@ int main()
 
 	Win mywindow(800, 600, "LearnOpenGL");
 	GLFWwindow *window = mywindow.getWin();
-				
-				/*CREATING A VERTEX*/
-	int  success;
-	char infoLog[512];
-	Shader vshader(vertexShaderSource, 0); //they need error messages for failed compilations
+	if (!window)
+		return -1;
+	Shader vshader(vertexShaderSource, 0);
 	Shader fshader(fragShaderSource, 1);
-
-	
-	//creating program object
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vshader.getShader());
-	glAttachShader(shaderProgram, fshader.getShader());
-	glLinkProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if(!success)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::PROGRAM::OBJECT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-	
-	//activating shader program and deleting shaders
-	glDeleteShader(vshader.getShader());
-	glDeleteShader(fshader.getShader());
-
+	if (!fshader.getShader() || !vshader.getShader())
+		return -1;
+	ProgShader pshader(vshader.getShader(), fshader.getShader());
+	if (!pshader.getShader())
+		return -1;
 	//linking vertex attributes
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);  
@@ -86,7 +70,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw our first triangle
-        glUseProgram(shaderProgram);
+        glUseProgram(pshader.getShader());
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawArrays(GL_TRIANGLES, 0, 3);
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

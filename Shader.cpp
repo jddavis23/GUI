@@ -16,8 +16,6 @@ Shader::Shader(const char *str, int choice)
             this->shader = glCreateShader(GL_FRAGMENT_SHADER);
             break;
     }
-    //this->shader = glCreateShader(GL_VERTEX_SHADER);
-	//glShaderSource(this->shader, 1, &vertexShaderSource, NULL);
 	glShaderSource(this->shader, 1, &str, NULL);
 	glCompileShader(this->shader);
     glGetShaderiv(this->shader, GL_COMPILE_STATUS, &this->success);//error checker
@@ -25,6 +23,8 @@ Shader::Shader(const char *str, int choice)
     {
         glGetShaderInfoLog(this->shader, 512, NULL, this->infoLog);
         std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << this->infoLog << std::endl;
+		this->shader = 0;
+		return ;
     }
 };
 
