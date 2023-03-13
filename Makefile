@@ -13,6 +13,7 @@ SRC2 += glad.c
 SRC2 += win.cpp
 SRC2 += Shader.cpp
 SRC2 += ProgShader.cpp
+SRC2 += ReadComp.cpp
 LIB = lib/libglfw.3.3.dylib
 INC = -I includes/GLFW/
 INC += -I includes/glad/

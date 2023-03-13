@@ -9,8 +9,6 @@ class ProgShader
 {
     private:
         unsigned int shader;
-        int  success;
-        char infoLog[512];
     public:
         ProgShader();
         ProgShader(unsigned int vsh, unsigned int fsh);

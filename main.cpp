@@ -6,7 +6,7 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 	//assigning vertices for a triangle, because GL uses 3D coordinate,
 	//each point of triangle is actually an x, y, z coordinate.
@@ -15,23 +15,15 @@ int main()
      0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
     -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
      0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
-};    
+	};    
 
+	if (argc != 3)
+		return -1;
 	Win mywindow(800, 600, "LearnOpenGL");
 	GLFWwindow *window = mywindow.getWin();
 	if (!window)
 		return -1;
-	Shader vshader(vertexShaderSource, 0);
-	Shader fshader(fragShaderSource, 1);
-	if (!fshader.getShader() || !vshader.getShader())
-		return -1;
-	ProgShader pshader(vshader.getShader(), fshader.getShader());
-	if (!pshader.getShader())
-		return -1;
-	
-	//linking vertex attributes
-	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	// glEnableVertexAttribArray(0);  
+	ReadComp prog(argv[1], argv[2]); 
 
 	unsigned int VBO;
 	unsigned int VAO;
@@ -62,11 +54,11 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw our first triangle
-        glUseProgram(pshader.getShader());
+        prog.use();
 		float timeValue = glfwGetTime();
 		float greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
-		int vertexColorLocation = glGetUniformLocation(pshader.getShader(), "ourColor");
-		glUseProgram(pshader.getShader());
+		int vertexColorLocation = glGetUniformLocation(prog.getID(), "ourColor");
+		glUseProgram(prog.getID());
 		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 	
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized

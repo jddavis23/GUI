@@ -1,13 +1,17 @@
 #ifndef PROJ_HPP
 #define PROJ_HPP
 
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <cmath>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "win.hpp"
 #include "Shader.hpp"
 #include "ProgShader.hpp"
-#include <iostream>
-#include <cmath>
+#include "ReadComp.hpp"
 
 static const char *vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n" // the position variable has attribute position 0

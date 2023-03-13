@@ -11,13 +11,13 @@ ProgShader::ProgShader(unsigned int vsh, unsigned int fsh)
 	glAttachShader(this->shader, vsh);
 	glAttachShader(this->shader, fsh);
 	glLinkProgram(this->shader);
-	glGetProgramiv(this->shader, GL_LINK_STATUS, &success);
-	if(!success)
-	{
-		glGetProgramInfoLog(this->shader, 512, NULL, infoLog);
-		std::cout << "ERROR::PROGRAM::OBJECT::COMPILATION_FAILED\n" << infoLog << std::endl;
-		this->shader = 0;
-	}
+	// glGetProgramiv(this->shader, GL_LINK_STATUS, &success);
+	// // if(!success)
+	// // {
+	// // 	glGetProgramInfoLog(this->shader, 512, NULL, infoLog);
+	// // 	std::cout << "ERROR::PROGRAM::OBJECT::COMPILATION_FAILED\n" << infoLog << std::endl;
+	// // 	this->shader = 0;
+	// // }
 	
 	//deleting vertex and fragment shaders
 	glDeleteShader(vsh);

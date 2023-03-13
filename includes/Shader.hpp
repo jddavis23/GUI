@@ -9,8 +9,8 @@ class Shader
 {
     private:
         unsigned int shader;
-        int  success;
-        char infoLog[512];
+        // int  success;
+        // char infoLog[512];
     public:
         Shader();
         Shader(const char *str, int choice);
