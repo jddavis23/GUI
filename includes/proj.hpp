@@ -8,6 +8,7 @@
 #include <cmath>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "stb_image.h"
 #include "win.hpp"
 #include "Shader.hpp"
 #include "ProgShader.hpp"
