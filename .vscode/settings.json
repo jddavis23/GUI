@@ -1,6 +1,17 @@
 {
 	"files.associations": {
 		"ios": "cpp",
-		"string": "cpp"
+		"string": "cpp",
+		"iostream": "cpp",
+		"__config": "cpp",
+		"__string": "cpp",
+		"algorithm": "cpp",
+		"cstddef": "cpp",
+		"functional": "cpp",
+		"fstream": "cpp",
+		"typeinfo": "cpp",
+		"utility": "cpp",
+		"complex": "cpp",
+		"new": "cpp"
 	}
 }

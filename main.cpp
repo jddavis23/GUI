@@ -18,7 +18,10 @@ int main(int argc, char *argv[])
 	};    
 
 	if (argc != 3)
+	{
+		std::cout << "Error: Incorrect args\n";
 		return -1;
+	}
 	Win mywindow(800, 600, "LearnOpenGL");
 	GLFWwindow *window = mywindow.getWin();
 	if (!window)
@@ -46,7 +49,7 @@ int main(int argc, char *argv[])
 
 	while(!glfwWindowShouldClose(window))
 	{
-		 processInput(window);
+		processInput(window);
 
         // render
         // ------
@@ -54,18 +57,16 @@ int main(int argc, char *argv[])
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw our first triangle
-        prog.use();
 		float timeValue = glfwGetTime();
 		float greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
 		int vertexColorLocation = glGetUniformLocation(prog.getID(), "ourColor");
-		glUseProgram(prog.getID());
+		
+        prog.use();
 		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 	
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawArrays(GL_TRIANGLES, 0, 3);
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        // glBindVertexArray(0); // no need to unbind it every time 
- 
+       
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);

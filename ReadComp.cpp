@@ -77,12 +77,11 @@ ReadComp & ReadComp::operator = (const ReadComp &a)
 
 ReadComp::~ReadComp()
 {
-	glUseProgram(ID);
 };
 
 void ReadComp::use()
 {
-
+	glUseProgram(pshader.getShader());
 };
 
 void ReadComp::setBool(const std::string &name, bool value) const
