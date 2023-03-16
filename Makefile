@@ -25,6 +25,7 @@ SRC3 += Shader.cpp
 SRC3 += ProgShader.cpp
 SRC3 += ReadComp.cpp
 SRC3 += stb.cpp
+SRC3 += LoadTex.cpp
 
 LIB = lib/libglfw.3.3.dylib
 INC = -I includes/GLFW/

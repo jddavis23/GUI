@@ -6,30 +6,15 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
-int loadtextur(char *str)
+void err_close(unsigned int VAO, unsigned int VBO, unsigned int EBO)
 {
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    // set the texture wrapping/filtering options (on the currently bound texture object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load and generate the texture
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load(str, &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-    return texture;
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // ------------------------------------------------------------------
+    glfwTerminate();
 }
 
 int main(int argc, char *argv[])
@@ -47,8 +32,6 @@ int main(int argc, char *argv[])
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
-    unsigned int texture1;
-    unsigned int texture2 = 0;
 
 	if (argc != 5)
 	{
@@ -68,15 +51,7 @@ int main(int argc, char *argv[])
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
-
-    
-
-    // glBindVertexArray(VAO);
-    // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); 
-
-   
-
-     glBindVertexArray(VAO);
+    glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -90,41 +65,18 @@ int main(int argc, char *argv[])
 	glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);  
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
+    //glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
-    texture1 = loadtextur(argv[3]);
-    //texture2 = loadtextur(argv[4]);
-
-     glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-         int width, height, nrChannels;
-     unsigned char *data = stbi_load(argv[4], &width, &height, &nrChannels, 0);
-    if (data)
+    LoadTex texture1(argv[3], GL_RGB);
+    LoadTex texture2(argv[4], GL_RGBA);
+    if (!texture1.getTexture() || !texture2.getTexture())
     {
-        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
+        err_close(VAO, VBO, EBO);
+        return -1;
     }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-    
-    if (!texture1)
-       return -1 ;
-    // glBindVertexArray(0); 
-     prog.use(); // don't forget to activate the shader before setting uniforms!  
-    glUniform1i(glGetUniformLocation(prog.getID(), "texture1"), 0); // set it manually
+    prog.use(); // don't forget to activate the shader before setting uniforms!  
+    prog.setInt("texture1", 0);
     prog.setInt("texture2", 1);
-
 	while(!glfwWindowShouldClose(window))
 	{
 		processInput(window);
@@ -134,22 +86,19 @@ int main(int argc, char *argv[])
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture2);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1.getTexture());
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2.getTexture());
         prog.use();
 	
-         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
-        // glBindTexture(GL_TEXTURE_2D, texture1);
-        // glBindVertexArray(VAO);
+        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
 	}
-	glfwTerminate();
+	err_close(VAO, VBO, EBO);
     return 0;
 }

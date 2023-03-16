@@ -16,6 +16,14 @@
 		"array": "cpp",
 		"iterator": "cpp",
 		"string_view": "cpp",
-		"vector": "cpp"
+		"vector": "cpp",
+		"__locale": "cpp",
+		"__nullptr": "cpp",
+		"bitset": "cpp",
+		"istream": "cpp",
+		"locale": "cpp",
+		"memory": "cpp",
+		"ostream": "cpp",
+		"streambuf": "cpp"
 	}
 }

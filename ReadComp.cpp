@@ -4,10 +4,10 @@ ReadComp::ReadComp() : ID(0) {};
 
 ReadComp::ReadComp(const char* vertexPath, const char* fragmentPath)
 {
-	std::string vertexCode;
-	std::string fragmentCode;
-	std::ifstream vShaderFile;
-	std::ifstream fShaderFile;
+	std::string		vertexCode;
+	std::string		fragmentCode;
+	std::ifstream	vShaderFile;
+	std::ifstream	fShaderFile;
 	vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 	fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 	try 
@@ -86,20 +86,20 @@ void ReadComp::use()
 
 void ReadComp::setBool(const std::string &name, bool value) const
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+	glUniform1i(glGetUniformLocation(this->getID(), name.c_str()), (int)value);
 };
 
 void ReadComp::setInt(const std::string &name, int value) const
 {
-	glUniform1i(glGetUniformLocation(this->ID, name.c_str()), value); 
-
-};   
-void ReadComp::setFloat(const std::string &name, float value) const
-{
-	glUniform1f(glGetUniformLocation(ID, name.c_str()), value); 
+	glUniform1i(glGetUniformLocation(this->getID(), name.c_str()), value); 
 };
 
-unsigned int ReadComp::getID()
+void ReadComp::setFloat(const std::string &name, float value) const
+{
+	glUniform1f(glGetUniformLocation(this->getID(), name.c_str()), value); 
+};
+
+unsigned int ReadComp::getID() const
 {
 	return this->pshader.getShader();
 };
