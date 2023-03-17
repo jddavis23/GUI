@@ -14,6 +14,7 @@
 #include "ProgShader.hpp"
 #include "ReadComp.hpp"
 #include "LoadTex.hpp"
+#include "Buffer.hpp"
 
 static const char *vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n" // the position variable has attribute position 0
