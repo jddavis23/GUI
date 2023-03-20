@@ -15,6 +15,9 @@
 #include "ReadComp.hpp"
 #include "LoadTex.hpp"
 #include "Buffer.hpp"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 static const char *vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n" // the position variable has attribute position 0

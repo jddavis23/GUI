@@ -13,7 +13,7 @@ class Buffer
         unsigned int EBO;
     public:
         Buffer();
-        Buffer(float vertices[], unsigned long szofv, unsigned indices[], unsigned long szofin);
+        Buffer(float vertices[], unsigned long szofv, unsigned int indices[], unsigned long szofin);
         Buffer(const Buffer &a);
         Buffer & operator = (const Buffer &a);
         ~Buffer();
