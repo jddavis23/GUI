@@ -31,11 +31,6 @@ int main(int argc, char *argv[])
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
-
-    // glm::mat4 trans = glm::mat4(1.0f);
-    // trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-    // trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));  
-
 	if (argc != 5)
 	{
 		std::cout << "usage: ./shader <vertex-comp-file> <fragment-comp-file> <texture-image> <texture-image>\n";
@@ -76,7 +71,7 @@ int main(int argc, char *argv[])
         glBindTexture(GL_TEXTURE_2D, texture2.getTexture());
          // create transformations
         glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
+        //transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
         transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
         prog.use();
