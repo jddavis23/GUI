@@ -16,6 +16,18 @@ void err_close(unsigned int VAO, unsigned int VBO, unsigned int EBO)
     glfwTerminate();
 }
 
+// void cursor_enter_callback(GLFWwindow* window, int entered)
+// {
+//     double xpos, ypos;
+    
+//     if (entered)
+//     {
+//         glfwGetCursorPos(window, &xpos, &ypos);
+//         std::cout << xpos << "   " << ypos << "\n";
+//         // The cursor entered the content area of the window
+//     }
+// }
+
 int main(int argc, char *argv[])
 {
 	//assigning vertices for a triangle, because GL uses 3D coordinate,
@@ -71,9 +83,19 @@ int main(int argc, char *argv[])
         glBindTexture(GL_TEXTURE_2D, texture2.getTexture());
          // create transformations
         glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        //transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
-        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
+        // transform = glm::translate(transform, glm::vec3(-0.5f, -0.5f, 0.0f));
+        // transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        if (glfwGetWindowAttrib(window, GLFW_HOVERED))
+        {
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            int w, h;
+            glfwGetWindowSize(window, &w, &h );
+            std::cout << xpos/w << "   " << ypos/h << "\n";
+            float nx = 2.0f * xpos / w - 1.0f;
+            float ny = 1.0f - 2.0f * ypos / h; 
+            transform = glm::translate(transform, glm::vec3(nx, ny, 0.0f));
+        }
         prog.use();
 	   unsigned int transformLoc = glGetUniformLocation(prog.getID(), "transform");
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
@@ -82,6 +104,9 @@ int main(int argc, char *argv[])
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
+        // glfwSetCursorEnterCallback(window, cursor_enter_callback);
+
+        
         glfwSwapBuffers(window);
         glfwPollEvents();
 	}
