@@ -12,7 +12,7 @@ LoadTex::LoadTex(char *str, int rendertype)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load and generate the texture
-    //stbi_set_flip_vertically_on_load(true); //flip image on loading because stbi loads upside down
+    stbi_set_flip_vertically_on_load(true); //flip image on loading because stbi loads upside down
     int width, height, nrChannels;
     unsigned char *data = stbi_load(str, &width, &height, &nrChannels, 0);
     if (data)

@@ -2,9 +2,11 @@ WINDOW = window
 SHADERS = shader
 TEXTURE = texture
 MATRIX = matrix
+GAME = game
 WHOLE = window
 WHOLE += shader
 WHOLE += matrix
+WHOLE += game
 
 CC = g++
 FRAMEWORK = -framework CoreFoundation
@@ -31,6 +33,16 @@ SRC3 += stb.cpp
 SRC3 += LoadTex.cpp
 SRC3 += Buffer.cpp
 
+SRC4 += game_main.cpp
+SRC4 += glad.c
+SRC4 += win.cpp
+SRC4 += Shader.cpp
+SRC4 += ProgShader.cpp
+SRC4 += ReadComp.cpp
+SRC4 += stb.cpp
+SRC4 += LoadTex.cpp
+SRC4 += Buffer.cpp
+
 LIB = lib/libglfw.3.3.dylib
 INC = -I includes/GLFW/
 INC += -I includes/glad/
@@ -46,6 +58,9 @@ $(SHADERS): $(SRC2)
 
 $(MATRIX): $(SRC3)
 	$(CC) $(ARGS) $(INC) $(FRAMEWORK) $(SRC3) $(LIB) -o $(MATRIX)
+
+$(GAME): $(SRC4)
+	$(CC) $(ARGS) $(INC) $(FRAMEWORK) $(SRC4) $(LIB) -o $(GAME)
 
 fclean:
 	rm $(WHOLE)
